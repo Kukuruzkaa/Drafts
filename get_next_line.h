@@ -21,11 +21,12 @@
 #endif
 
 int	get_next_line(int fd, char **line);
+int		find_n(char *s);
 char	*ft_strdup(const char *s1);
-char	*ft_substr(char *s, unsigned int start, size_t len);
+char	*ft_substr(char const *s, unsigned int start, size_t len);
 int	ft_strlen(const char *s);
 char	*ft_strchr(const char *s, int c);
-char	*ft_strjoin(char *s1, char *s2, size_t size);
+char    *ft_strjoin(const char *s1, const char *s2);
 void    *ft_calloc(size_t count, size_t size);
 void    *ft_memset(void *b, int c, size_t len);
 int 	ft_strchr_g(char *s, int c);

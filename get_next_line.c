@@ -13,10 +13,11 @@
 #include <unistd.h>
 #include <stdlib.h>
 #include "get_next_line.h"
-#include <fcntl.h>
+#include<fcntl.h>
 #include <stdio.h>
 
-void 	*update_buffer(char *buffer)
+
+/*void 	*update_buffer(char *buffer)
 {
 	int start;
 	char	*temp;
@@ -64,7 +65,7 @@ int get_next_line(int fd, char **line)
 	//printf("***START OF GNL***\n");
 
 	//printf("line : '%s' buffer : '%s'\n", *line, buffer);
-	//*line = NULL;
+	line = NULL;
 	
 	if (fd == -1 || !line || BUFFER_SIZE <= 0)
 	{   
@@ -91,12 +92,12 @@ int get_next_line(int fd, char **line)
 		{
 			free(buffer);
 			buffer = NULL;
-			/*if (line)
+			if (line)
 			{
 				free(*line);
 				line = NULL;
 			}
-			return (ret);*/
+			return (ret);
 		}
 		buffer = update_line_and_buffer(line, buffer);
 		//printf("line : '%s' buffer : '%s'\n", *line, buffer);
@@ -104,57 +105,74 @@ int get_next_line(int fd, char **line)
 	buffer = ft_substr(buffer, 1, BUFFER_SIZE - 1);
 	printf("line : '%s' buffer : '%s'\n", *line, buffer);
 	printf("***END OF GNL***\n");
-	return (1);
+	return (1);*/
 	
+static char* ft_malloctail(void)
+{
+	char *dest;
+
+	if(!(dest = (char*)malloc(sizeof(char) * 1)))
+		return (NULL);
+	dest[0] = '\0';
+	return (dest);
+}
 
 
+int get_next_line(int fd, char **line)
+{
+	int i;
+	int ret;
+	static char *tail;
+	char *temp;
+	char buf[BUFFER_SIZE + 1];
 
+	if (fd == -1 || !line || BUFFER_SIZE <= 0)
+		return (-1);	
+	if (tail == NULL)
+	{
+		tail = ft_malloctail();
+	}
+	i = 0;
+	if ((ft_strchr_g(tail, '\n')))
+	{
+		i = find_n(tail);
+		*line = ft_substr(tail, 0, i);
+		temp = tail;
+		tail = ft_strdup(&tail[i + 1]);
+		free(temp);
+		return (1);
+	}
+	while ((ret = read(fd, buf, BUFFER_SIZE)) > 0)
+	{   
+		 (buf[ret] = '\0');
+		 temp = tail;
+		 tail = ft_strjoin(tail, buf);
+		 free(temp);
+		 if ((ft_strchr_g(tail, '\n')))
+		 {
+			 i = find_n(tail);
+			 *line = ft_substr(tail, 0, i);
+			 temp = tail;
+			 tail = ft_strdup(&tail[i + 1]);
+			 free(temp);
+			 return (1);
+		 }
+	}
 
-
-	// if (!(buf = (char*)malloc(sizeof(char) * (BUF_SIZE + 1))))
-	// {   
-	//	 if (lu)
-	//		 free(lu);
-	//	 return (-1);
-	// }
-	// while ((ret = read(fd, buf, BUF_SIZE)) > 0)
-	// {   
-	//	 (buf[ret] = '\0');
-	//	 i = 0;
-	//	 temp = ft_strjoin(lu, buf, ret); 
-	//	 free (lu);
-	//	 lu = temp;
-	//	 if ((i = ft_strchr_g(lu, '\n')) >= 0)
-	//	 {
-	//		 *line = ft_substr(lu, 0, i);
-	//		 temp = ft_strdup(&lu[i + 1]);
-	//		 free(lu);
-	//		 lu = temp;
-	//		 return (1);
-	//	 }
-	// }
-	// free(buf);
 	// if (ret < 0)
-	// {
-	//	 free(lu);
-	//	 return (-1);
+	// {printf("**test3**\n");
+	// 	 free(tail);
+	// 	 return (-1);
 	// }
-	// else if (ret == 0 && lu == NULL)
-	// {
-	//	 //free(lu);
-	//	 return (0);
+	// else if (ret == 0 && tail == NULL)
+	// {printf("**test4**\n");
+	// 	 //free(tail);
+	// 	 return (0);
 	// }
-	// //free (buf);
-	// i = 0;
-	// if (lu[i++])
-	// {
-	//	 *line = ft_strdup(&lu[i]);
-	//	 free(lu);
-	// }
-	// else 
-	//	 *line = ft_strdup(&lu[i]);
-	// lu = 0;
-	// return (0);
+	free(tail);
+	printf("**test5**\n");
+
+	return (0);
 		
 }
 
@@ -162,17 +180,30 @@ int get_next_line(int fd, char **line)
 // {
 // 	int fd;
 // 	char *line;
-// 	int r;
 
-// 	fd = open ("file.txt", O_RDONLY);
-// 	//get_next_line(fd, &line);
-// 	while ((r = get_next_line (fd, &line)) > 0)
+// 	//int r;
+
+	
+// 	fd = open ("text.txt", O_RDONLY);
+// 	// printf("===============================**1**==============================\n");
+// 	// printf("=== get = %d=====\n", get_next_line(fd, &line));
+// 	// printf("====line = %s===\n", line);
+// 	// printf("=================================**2**============================\n");
+// 	// printf("=== get = %d=====\n", get_next_line(fd, &line));
+// 	// printf("====line = %s===\n", line);
+// 	// printf("================================**3**=============================\n");
+// 	// printf("=== get = %d=====\n", get_next_line(fd, &line));
+// 	// printf("====line = %s===\n", line);
+// 	// printf("==============================**4**===============================\n");
+// 	// printf("=== get = %d=====\n", get_next_line(fd, &line));
+// 	// printf("====line = %s===\n", line);
+// 	// printf("=============================================================\n");
+
+// 	while ((get_next_line(fd, &line)) > 0)
 // 	{   
 // 		printf("%s\n", line);
-// 		free(line);
 // 	}
-// 	printf("%s\n", line);
-// 		free(line);
+// 	//printf("%s\n", line);
 
 // 	return (0);
 // }

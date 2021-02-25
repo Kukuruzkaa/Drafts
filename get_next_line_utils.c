@@ -12,8 +12,20 @@
 
 #include "get_next_line.h"
 
-char	*ft_strdup(const char *s1)
+int		find_n(char *s)
 {
+	int i;
+
+	i = 0;
+	while(s[i] != '\n')
+	{
+		i++;
+	}
+	return (i);
+}
+
+char	*ft_strdup(const char *s1)
+{//printf("s1 = %s\n", s1);
 	char	*s2;
 	int		length;
 	int		i;
@@ -33,7 +45,7 @@ char	*ft_strdup(const char *s1)
 	return (s2);
 }
 
-char	*ft_substr(char *s, unsigned int start, size_t len)
+char	*ft_substr(char const *s, unsigned int start, size_t len)
 {
 	size_t		j;
 	size_t		length;
@@ -56,8 +68,6 @@ char	*ft_substr(char *s, unsigned int start, size_t len)
 		j++;
 	}
 	s2new[j] = '\0';
-	//free(s);
-	//s = NULL;
 	return (s2new);
 }
 
@@ -89,7 +99,7 @@ char	*ft_strchr(const char *s, int c)
 }
 
 int 	ft_strchr_g(char *s, int c)
-{
+{//printf("====== tail dans chr = [%s]===========\n", s);
 	int 		i;
 	
 	i = 0;
@@ -98,38 +108,34 @@ int 	ft_strchr_g(char *s, int c)
 	while (s[i])
 	{
 		if (s[i] == c)
-			return (i);
-		i++;
+			return (1);
+		i++;		
 	}
-	return i;
+	return 0;
 }
 
-char	*ft_strjoin(char *s1, char *s2, size_t size)
+char    *ft_strjoin(const char *s1, const char *s2)
 {
-	size_t	str1len;
-	size_t	i;
-	size_t	j;
-	char	*s3;
-
-	str1len = ft_strlen(s1);
-	if (!(s3 = (char*)malloc(sizeof(char) * (str1len + size + 1))))
-		return (NULL);
-	i = 0;
-	while ( i < str1len)
-	{
-		s3[i] = s1[i];
-		i++;
-	}
-	j = 0;
-	while (j < size)
-	{
-		s3[str1len + j] = s2[j];
-		j++;
-	}
-	s3[str1len + size] = '\0';
-	free(s1);
-	s1 = NULL;
-	return (s3);
+    char    *str;
+    int        i;
+    int        j;
+    i = 0;
+    j = 0;
+    if (!(str = malloc(sizeof(char) * (ft_strlen(s1) + ft_strlen(s2)) + 1)))
+        return (NULL);
+    while (s1[j] != '\0')
+    {
+        str[i] = s1[j];
+        i++;
+        j++;
+    }
+    j = 0;
+    while (s2[j] != '\0')
+    {
+        str[i++] = s2[j++];
+    }
+    str[i] = '\0';
+    return (str);
 }
 void    *ft_memset(void *b, int c, size_t len)
 {
